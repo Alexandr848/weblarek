@@ -1,3 +1,5 @@
+import { ApiPostMethods, IApi } from "../types";
+
 export const apiProducts = {
     "total": 10,
     "items": [
@@ -35,3 +37,29 @@ export const apiProducts = {
         },
     ]
 }
+
+export const apiProd: IApi = {
+  get: async <T extends object>(uri: string): Promise<T> => {
+    console.log(`[MOCK] GET: ${uri}`);
+    if (uri === '/products/') {
+      return apiProducts as unknown as T;
+    }
+    throw new Error(`Endpoint not found: ${uri}`);
+  },
+
+  post: async <T extends object>(
+    uri: string,
+    data: object,
+    method?: ApiPostMethods
+  ): Promise<T> => {
+    console.log(`[MOCK] POST: ${uri}`, data);
+    if (uri === '/order/') {
+      return {
+        orderId: 'prod-order-123',
+        status: 'success',
+        amount: 6000
+      } as T;
+    }
+    throw new Error(`Endpoint not found: ${uri}`);
+  }
+};
